@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ClassFlow — Coaching Operating System</title>
+<meta name="description" content="ClassFlow helps coaching centres manage students, teachers, batches, attendance, fees, tests, communication and operations in one platform.">
+<style>
+:root{--bg:#050914;--panel:#0c1425;--panel2:#101b30;--line:#22334e;--text:#f4f7ff;--muted:#9ba9c0;--cyan:#67dcff;--purple:#8f80ff;--warn:#ffd46b}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 50% -5%,#173b62 0,transparent 40%),var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif}html{scroll-behavior:smooth}
+a{text-decoration:none;color:inherit}.notice{padding:12px 18px;text-align:center;background:#10253a;border-bottom:1px solid #294663;font-size:13px;font-weight:800}.notice b{color:var(--warn)}
+nav{max-width:1180px;margin:auto;padding:19px 24px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,.06)}.logo{font-weight:950;font-size:25px;letter-spacing:1px}.logo span{color:var(--cyan)}.navlinks{display:flex;gap:25px;color:var(--muted);font-size:14px}.nav-actions{display:flex;gap:9px}.navbtn{border:1px solid var(--line);padding:10px 14px;border-radius:10px;font-weight:800;font-size:13px}
+main{max-width:1180px;margin:auto;padding:0 24px}.hero{text-align:center;padding:88px 0 75px}.eyebrow{color:var(--cyan);letter-spacing:4px;font-size:12px;font-weight:900}.hero h1{font-size:clamp(45px,7vw,78px);line-height:.98;margin:18px 0}.hero h1 span{background:linear-gradient(90deg,#fff,#9cecff,#aaa0ff);-webkit-background-clip:text;color:transparent}.hero p{max-width:780px;margin:auto;color:var(--muted);font-size:18px;line-height:1.7}.hero-actions{margin-top:31px;display:flex;justify-content:center;gap:12px;flex-wrap:wrap}.btn{border:1px solid var(--line);border-radius:12px;padding:14px 20px;font-weight:900;cursor:pointer}.primary{border:0;background:linear-gradient(90deg,var(--cyan),var(--purple));color:#07101c}
+section{padding:55px 0}.title{text-align:center;margin-bottom:30px}.title h2{font-size:35px;margin:0 0 8px}.title p{color:var(--muted);margin:0}.features{display:grid;grid-template-columns:repeat(3,1fr);gap:17px}.feature,.plan{background:linear-gradient(180deg,#101b2e,#0a1322);border:1px solid var(--line);border-radius:20px;padding:25px}.feature p,.plan li{color:var(--muted);line-height:1.65}.feature h3{margin-top:0}
+.plans{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}.plan{cursor:pointer;transition:.2s}.plan:hover{transform:translateY(-3px);border-color:#426286}.tag{display:inline-block;background:var(--cyan);color:#07101c;border-radius:999px;padding:5px 9px;font-size:10px;font-weight:950}.plan h3{font-size:25px}.price{font-size:38px;font-weight:950;margin:12px 0}.price small{font-size:14px;color:var(--muted)}.plan .select{width:100%;border:0;border-radius:11px;padding:13px;background:#1b2a43;color:#aab8cd;font-weight:900;cursor:pointer}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}.step{border:1px solid var(--line);border-radius:17px;padding:20px;background:#0b1424}.num{color:var(--cyan);font-weight:950;font-size:13px}.step p{color:var(--muted);line-height:1.55}
+.contact{max-width:800px;margin:auto;text-align:center}.contact .box{border:1px solid var(--line);border-radius:20px;padding:30px;background:#0d1729}.contact p{color:var(--muted)}
+footer{max-width:1180px;margin:20px auto 0;padding:35px 24px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;color:var(--muted)}footer a{text-decoration:underline}.legal{display:flex;gap:15px;flex-wrap:wrap}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:30;align-items:center;justify-content:center;padding:18px}.modal.open{display:flex}.box{width:min(560px,100%);max-height:90vh;overflow:auto;background:#0b1527;border:1px solid #2a4160;border-radius:22px;padding:28px;position:relative}.x{position:absolute;right:18px;top:12px;font-size:29px;color:var(--muted);cursor:pointer}.box h2{margin:0 40px 8px}.box .sub{color:var(--muted);font-size:14px}.tabs{display:flex;gap:8px;margin:20px 0}.tab{flex:1;padding:11px;border-radius:10px;border:1px solid var(--line);background:#0a1322;color:var(--muted);font-weight:900;cursor:pointer}.tab.active{background:#1c2e49;color:white}.form{display:grid;gap:12px}.form input{width:100%;padding:13px 14px;background:#08111f;border:1px solid #263b57;color:white;border-radius:10px;outline:none}.form button{padding:14px;border:0;border-radius:11px;background:linear-gradient(90deg,var(--cyan),var(--purple));font-weight:950;color:#07101c;cursor:pointer}.hint{color:var(--muted);font-size:12px;line-height:1.5}.plan-summary{border:1px solid var(--line);border-radius:14px;padding:17px;margin:16px 0}.disabled{background:#263752!important;color:#8795aa!important;cursor:not-allowed!important}
+@media(max-width:800px){.navlinks{display:none}.features,.steps,.plans{grid-template-columns:1fr}.hero{padding-top:55px}.nav-actions .navbtn:first-child{display:none}}
+</style>
+</head>
+<body>
+<div class="notice">🚧 <b>CLASSFLOW IS CURRENTLY UNDER CONSTRUCTION</b> — The website is being prepared for launch. No payment is currently being collected.</div>
+
+<nav>
+<div class="logo">CLASS<span>FLOW</span></div>
+<div class="navlinks"><a href="#about">About</a><a href="#features">Features</a><a href="#plans">Plans</a><a href="#contact">Contact</a></div>
+<div class="nav-actions"><button class="navbtn" onclick="openAuth('login')">Sign in</button><button class="navbtn primary" onclick="openAuth('signup')">Create account</button></div>
+</nav>
+
+<main>
+<section class="hero" id="about">
+<div class="eyebrow">COACHING OPERATING SYSTEM</div>
+<h1>Run your coaching centre<br><span>better.</span></h1>
+<p>ClassFlow brings students, teachers, batches, attendance, fees, tests, communication and institute management into one connected platform — built for coaching centres.</p>
+<div class="hero-actions">
+<button class="btn primary" onclick="openAuth('signup')">Get started</button>
+<button class="btn" onclick="openAuth('login')">Existing user? Sign in</button>
+</div>
+</section>
+
+<section id="features">
+<div class="title"><h2>What ClassFlow does</h2><p>Understand the platform before choosing a plan.</p></div>
+<div class="features">
+<div class="feature"><h3>👨‍🎓 Student Management</h3><p>Student profiles, batches, attendance, fee status and day-to-day academic operations.</p></div>
+<div class="feature"><h3>👨‍🏫 Teacher Management</h3><p>Teacher access, assigned batches, classes and operational workflows.</p></div>
+<div class="feature"><h3>📊 Attendance & Results</h3><p>Attendance tracking, tests, results and performance-related information.</p></div>
+<div class="feature"><h3>💳 Fees & Payments</h3><p>Track institute fees and payment records with subscription-aware workflows.</p></div>
+<div class="feature"><h3>📣 Communication</h3><p>Keep centre operations and communication connected in one system.</p></div>
+<div class="feature"><h3>⚙️ Centre Operations</h3><p>Bring core coaching-centre administration into one connected workspace.</p></div>
+</div>
+</section>
+
+<section>
+<div class="title"><h2>How it works</h2><p>No payment is requested immediately.</p></div>
+<div class="steps">
+<div class="step"><div class="num">01 — EXPLORE</div><p>Learn what ClassFlow does and compare the available plans.</p></div>
+<div class="step"><div class="num">02 — ACCOUNT</div><p>Create a ClassFlow account or sign in if you already have one.</p></div>
+<div class="step"><div class="num">03 — CHOOSE</div><p>Select Basic or Pro and review your subscription before checkout.</p></div>
+<div class="step"><div class="num">04 — PAYMENT</div><p>When payments launch, continue to the secure Cashfree checkout.</p></div>
+</div>
+</section>
+
+<section id="plans">
+<div class="title"><h2>Plans</h2><p>Choose a plan after signing in.</p></div>
+<div class="plans">
+<div class="plan" onclick="selectPlan('Basic',3999)">
+<span class="tag">BASIC</span><h3>ClassFlow Basic</h3><div class="price">₹3,999 <small>/ month</small></div>
+<ul><li>Students management</li><li>Teachers management</li><li>Batches</li><li>Attendance</li><li>Fees & Payments</li><li>Tests & Results</li></ul><button class="select">Select Basic</button>
+</div>
+<div class="plan" onclick="selectPlan('Pro',5999)">
+<span class="tag">PRO</span><h3>ClassFlow Pro</h3><div class="price">₹5,999 <small>/ month</small></div>
+<ul><li>Everything in Basic</li><li>Performance insights</li><li>Advanced communication</li><li>Additional capabilities</li></ul><button class="select">Select Pro</button>
+</div>
+</div>
+</section>
+
+<section id="contact"><div class="title"><h2>Contact</h2><p>Interested in ClassFlow for your coaching centre?</p></div><div class="contact"><div class="box"><h3>ClassFlow</h3><p>Email: <a href="mailto:theclassflow@gmail.com">theclassflow@gmail.com</a></p><p>We are currently preparing ClassFlow for coaching-centre onboarding.</p></div></div></section>
+</main>
+
+<footer><div>© 2026 ClassFlow. All rights reserved.</div><div class="legal"><a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms & Conditions</a><a href="refund.html">Refund & Cancellation</a></div></footer>
+
+<div id="authModal" class="modal"><div class="box"><div class="x" onclick="closeModal('authModal')">×</div><h2 id="authTitle">Create your ClassFlow account</h2><div class="sub" id="authSub">Create an account first. You can explore plans before payment.</div>
+<div class="tabs"><button id="signupTab" class="tab active" onclick="setAuth('signup')">Create account</button><button id="loginTab" class="tab" onclick="setAuth('login')">Existing user</button></div>
+<form class="form" onsubmit="demoAuth(event)"><input id="name" placeholder="Owner / your name" required><input id="email" type="email" placeholder="Email address" required><input id="password" type="password" placeholder="Password" required><button id="authSubmit">Create account</button><div class="hint">Account UI is prepared now. Live authentication will be connected to the ClassFlow backend — this page does not store your password.</div></form></div></div>
+
+<div id="planModal" class="modal"><div class="box"><div class="x" onclick="closeModal('planModal')">×</div><h2 id="planTitle"></h2><div class="sub">You must sign in/create an account before continuing to checkout.</div><div class="plan-summary"><strong id="planPrice"></strong><p id="planText" class="hint"></p></div><button class="form" style="width:100%" onclick="openAuth('signup')"><span class="btn primary" style="text-align:center">Create account & continue</span></button><button class="btn" style="width:100%;margin-top:10px" onclick="openAuth('login')">Already have an account? Sign in</button></div></div>
+
+<script>
+let authMode='signup',selectedPlan=null;
+function openModal(id){document.getElementById(id).classList.add('open')}
+function closeModal(id){document.getElementById(id).classList.remove('open')}
+function openAuth(mode){closeModal('planModal');setAuth(mode);openModal('authModal')}
+function setAuth(mode){authMode=mode;document.getElementById('signupTab').classList.toggle('active',mode==='signup');document.getElementById('loginTab').classList.toggle('active',mode==='login');document.getElementById('authTitle').textContent=mode==='signup'?'Create your ClassFlow account':'Welcome back to ClassFlow';document.getElementById('authSub').textContent=mode==='signup'?'Create an account first. You can explore plans before payment.':'Sign in to your existing ClassFlow account to continue.';document.getElementById('name').style.display=mode==='signup'?'block':'none';document.getElementById('authSubmit').textContent=mode==='signup'?'Create account':'Sign in'}
+function selectPlan(name,price){selectedPlan={name,price};document.getElementById('planTitle').textContent='ClassFlow '+name;document.getElementById('planPrice').textContent='₹'+price.toLocaleString('en-IN')+' / month';document.getElementById('planText').textContent='Review the plan, then create an account or sign in. Payment is not being collected while ClassFlow is under construction.';openModal('planModal')}
+function demoAuth(e){e.preventDefault();alert(authMode==='signup'?'Account flow is ready for backend connection. No payment was taken.':'Sign-in flow is ready for backend connection. No payment was taken.')}
+window.onclick=e=>{if(e.target.classList.contains('modal'))e.target.classList.remove('open')}
+</script>
+</body></html>
