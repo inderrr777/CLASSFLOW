@@ -20,7 +20,7 @@ footer{max-width:1180px;margin:20px auto 0;padding:35px 24px;border-top:1px soli
 </style>
 </head>
 <body>
-<div class="notice">🚧 <b>CLASSFLOW IS CURRENTLY UNDER CONSTRUCTION</b> — The website is being prepared for launch. No payment is currently being collected.</div>
+<div class="notice">🚧 <b>CLASSFLOW IS CURRENTLY UNDER CONSTRUCTION</b> — The website is being prepared for launch. Payments are available only through the configured Cashfree sandbox until production launch.</div>
 
 <nav>
 <div class="logo">CLASS<span>FLOW</span></div>
@@ -80,20 +80,159 @@ footer{max-width:1180px;margin:20px auto 0;padding:35px 24px;border-top:1px soli
 
 <footer><div>© 2026 ClassFlow. All rights reserved.</div><div class="legal"><a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms & Conditions</a><a href="refund.html">Refund & Cancellation</a></div></footer>
 
-<div id="authModal" class="modal"><div class="box"><div class="x" onclick="closeModal('authModal')">×</div><h2 id="authTitle">Create your ClassFlow account</h2><div class="sub" id="authSub">Create an account first. You can explore plans before payment.</div>
+
+<div id="authModal" class="modal"><div class="box"><div class="x" onclick="closeModal('authModal')">×</div>
+<h2 id="authTitle">Create your ClassFlow account</h2>
+<div class="sub" id="authSub">Create your account, then choose a plan and continue to secure checkout.</div>
 <div class="tabs"><button id="signupTab" class="tab active" onclick="setAuth('signup')">Create account</button><button id="loginTab" class="tab" onclick="setAuth('login')">Existing user</button></div>
-<form class="form" onsubmit="demoAuth(event)"><input id="name" placeholder="Owner / your name" required><input id="email" type="email" placeholder="Email address" required><input id="password" type="password" placeholder="Password" required><button id="authSubmit">Create account</button><div class="hint">Account UI is prepared now. Live authentication will be connected to the ClassFlow backend — this page does not store your password.</div></form></div></div>
+<form id="authForm" class="form" onsubmit="submitAuth(event)">
+<input id="name" placeholder="Owner / your name" required>
+<input id="email" type="email" placeholder="Email address" required>
+<input id="password" type="password" placeholder="Password" minlength="6" required>
+<button id="authSubmit">Create account</button>
+<div id="authStatus" class="hint"></div>
+</form></div></div>
 
-<div id="planModal" class="modal"><div class="box"><div class="x" onclick="closeModal('planModal')">×</div><h2 id="planTitle"></h2><div class="sub">You must sign in/create an account before continuing to checkout.</div><div class="plan-summary"><strong id="planPrice"></strong><p id="planText" class="hint"></p></div><button class="form" style="width:100%" onclick="openAuth('signup')"><span class="btn primary" style="text-align:center">Create account & continue</span></button><button class="btn" style="width:100%;margin-top:10px" onclick="openAuth('login')">Already have an account? Sign in</button></div></div>
+<div id="planModal" class="modal"><div class="box"><div class="x" onclick="closeModal('planModal')">×</div>
+<h2 id="planTitle"></h2><div class="sub">Choose this plan and continue to Cashfree secure checkout.</div>
+<div class="plan-summary"><strong id="planPrice"></strong><p id="planText" class="hint"></p></div>
+<button id="checkoutBtn" class="form" style="width:100%" onclick="startCheckout()"><span class="btn primary" style="text-align:center">Continue to Cashfree payment</span></button>
+<div id="checkoutStatus" class="hint" style="margin-top:12px"></div>
+</div></div>
 
+<div id="accountModal" class="modal"><div class="box"><div class="x" onclick="closeModal('accountModal')">×</div>
+<h2>ClassFlow account</h2><div class="sub">You are signed in.</div>
+<div class="plan-summary"><strong id="accountEmail"></strong><p class="hint">Choose a plan from the Plans section to continue to payment.</p></div>
+<button class="btn" style="width:100%" onclick="logout()">Sign out</button>
+</div></div>
 <script>
-let authMode='signup',selectedPlan=null;
+/*
+  FRONTEND CONFIG
+  Deploy the backend separately and put its public HTTPS URL here.
+  Example: https://classflow-api.onrender.com
+*/
+const API_BASE = localStorage.getItem('classflow_api_base') || 'https://YOUR-BACKEND-DOMAIN';
+
+let authMode='signup', selectedPlan=null;
+
 function openModal(id){document.getElementById(id).classList.add('open')}
 function closeModal(id){document.getElementById(id).classList.remove('open')}
-function openAuth(mode){closeModal('planModal');setAuth(mode);openModal('authModal')}
-function setAuth(mode){authMode=mode;document.getElementById('signupTab').classList.toggle('active',mode==='signup');document.getElementById('loginTab').classList.toggle('active',mode==='login');document.getElementById('authTitle').textContent=mode==='signup'?'Create your ClassFlow account':'Welcome back to ClassFlow';document.getElementById('authSub').textContent=mode==='signup'?'Create an account first. You can explore plans before payment.':'Sign in to your existing ClassFlow account to continue.';document.getElementById('name').style.display=mode==='signup'?'block':'none';document.getElementById('authSubmit').textContent=mode==='signup'?'Create account':'Sign in'}
-function selectPlan(name,price){selectedPlan={name,price};document.getElementById('planTitle').textContent='ClassFlow '+name;document.getElementById('planPrice').textContent='₹'+price.toLocaleString('en-IN')+' / month';document.getElementById('planText').textContent='Review the plan, then create an account or sign in. Payment is not being collected while ClassFlow is under construction.';openModal('planModal')}
-function demoAuth(e){e.preventDefault();alert(authMode==='signup'?'Account flow is ready for backend connection. No payment was taken.':'Sign-in flow is ready for backend connection. No payment was taken.')}
+
+function setAuth(mode){
+  authMode=mode;
+  document.getElementById('signupTab').classList.toggle('active',mode==='signup');
+  document.getElementById('loginTab').classList.toggle('active',mode==='login');
+  document.getElementById('authTitle').textContent=mode==='signup'?'Create your ClassFlow account':'Welcome back to ClassFlow';
+  document.getElementById('authSub').textContent=mode==='signup'
+    ?'Create your account, then choose a plan and continue to secure checkout.'
+    :'Sign in to your existing ClassFlow account, then continue to checkout.';
+  document.getElementById('name').style.display=mode==='signup'?'block':'none';
+  document.getElementById('name').required=mode==='signup';
+  document.getElementById('authSubmit').textContent=mode==='signup'?'Create account':'Sign in';
+  document.getElementById('authStatus').textContent='';
+}
+
+function openAuth(mode){
+  closeModal('planModal');
+  setAuth(mode);
+  openModal('authModal');
+}
+
+function selectPlan(name,price){
+  selectedPlan={name,price};
+  document.getElementById('planTitle').textContent='ClassFlow '+name;
+  document.getElementById('planPrice').textContent='₹'+price.toLocaleString('en-IN')+' / month';
+  document.getElementById('planText').textContent='Your account is required before payment. After authentication, the Continue button creates a Cashfree sandbox order and opens the secure Cashfree checkout.';
+  openModal('planModal');
+}
+
+function token(){return localStorage.getItem('classflow_token')||''}
+
+async function api(path, options={}){
+  const headers=Object.assign({'Content-Type':'application/json'}, options.headers||{});
+  if(token()) headers.Authorization='Bearer '+token();
+  const r=await fetch(API_BASE+path, Object.assign({},options,{headers}));
+  let data={};
+  try{data=await r.json()}catch(_){}
+  if(!r.ok) throw new Error(data.detail||data.message||('Request failed: '+r.status));
+  return data;
+}
+
+async function submitAuth(e){
+  e.preventDefault();
+  const status=document.getElementById('authStatus');
+  status.textContent='Connecting to ClassFlow…';
+  const body=authMode==='signup'
+    ? {name:document.getElementById('name').value.trim(),email:document.getElementById('email').value.trim(),password:document.getElementById('password').value}
+    : {email:document.getElementById('email').value.trim(),password:document.getElementById('password').value};
+  try{
+    const data=await api(authMode==='signup'?'/api/signup':'/api/login',{method:'POST',body:JSON.stringify(body)});
+    localStorage.setItem('classflow_token',data.access_token);
+    localStorage.setItem('classflow_user',JSON.stringify(data.user));
+    closeModal('authModal');
+    if(selectedPlan){openModal('planModal');}
+    else {alert('You are signed in. Choose a plan to continue.');}
+  }catch(err){status.textContent=err.message}
+}
+
+async function startCheckout(){
+  if(!selectedPlan) return;
+  if(!token()){
+    closeModal('planModal');
+    setAuth('login');
+    openModal('authModal');
+    return;
+  }
+  const status=document.getElementById('checkoutStatus');
+  const btn=document.getElementById('checkoutBtn');
+  btn.disabled=true; status.textContent='Creating secure Cashfree order…';
+  try{
+    const data=await api('/api/create-order',{
+      method:'POST',
+      body:JSON.stringify({plan:selectedPlan.name,amount:selectedPlan.price})
+    });
+    if(!data.payment_session_id) throw new Error('Cashfree did not return a payment session.');
+    if(!window.Cashfree) throw new Error('Cashfree checkout SDK is not loaded.');
+    const cashfree=Cashfree({mode:data.mode||'sandbox'});
+    await cashfree.checkout({paymentSessionId:data.payment_session_id,redirectTarget:'_self'});
+  }catch(err){
+    status.textContent=err.message;
+    btn.disabled=false;
+  }
+}
+
+function logout(){
+  localStorage.removeItem('classflow_token');
+  localStorage.removeItem('classflow_user');
+  closeModal('accountModal');
+  alert('Signed out.');
+}
+
+function showAccount(){
+  const u=JSON.parse(localStorage.getItem('classflow_user')||'{}');
+  document.getElementById('accountEmail').textContent=u.email||'Signed-in user';
+  openModal('accountModal');
+}
+
 window.onclick=e=>{if(e.target.classList.contains('modal'))e.target.classList.remove('open')}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  // Add Cashfree's public checkout SDK. No secret is ever placed in this page.
+  const s=document.createElement('script');
+  s.src='https://sdk.cashfree.com/js/v3/cashfree.js';
+  s.async=true;
+  document.head.appendChild(s);
+
+  const user=localStorage.getItem('classflow_user');
+  if(user){
+    const btns=document.querySelectorAll('.nav-actions .navbtn');
+    if(btns.length>=2){
+      btns[0].textContent='My account';
+      btns[0].onclick=showAccount;
+      btns[1].textContent='Sign out';
+      btns[1].onclick=logout;
+    }
+  }
+});
 </script>
 </body></html>
