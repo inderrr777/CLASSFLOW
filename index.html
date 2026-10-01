@@ -17,6 +17,35 @@ section{padding:55px 0}.title{text-align:center;margin-bottom:30px}.title h2{fon
 footer{max-width:1180px;margin:20px auto 0;padding:35px 24px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;color:var(--muted)}footer a{text-decoration:underline}.legal{display:flex;gap:15px;flex-wrap:wrap}
 .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:30;align-items:center;justify-content:center;padding:18px}.modal.open{display:flex}.box{width:min(560px,100%);max-height:90vh;overflow:auto;background:#0b1527;border:1px solid #2a4160;border-radius:22px;padding:28px;position:relative}.x{position:absolute;right:18px;top:12px;font-size:29px;color:var(--muted);cursor:pointer}.box h2{margin:0 40px 8px}.box .sub{color:var(--muted);font-size:14px}.tabs{display:flex;gap:8px;margin:20px 0}.tab{flex:1;padding:11px;border-radius:10px;border:1px solid var(--line);background:#0a1322;color:var(--muted);font-weight:900;cursor:pointer}.tab.active{background:#1c2e49;color:white}.form{display:grid;gap:12px}.form input{width:100%;padding:13px 14px;background:#08111f;border:1px solid #263b57;color:white;border-radius:10px;outline:none}.form button{padding:14px;border:0;border-radius:11px;background:linear-gradient(90deg,var(--cyan),var(--purple));font-weight:950;color:#07101c;cursor:pointer}.hint{color:var(--muted);font-size:12px;line-height:1.5}.plan-summary{border:1px solid var(--line);border-radius:14px;padding:17px;margin:16px 0}.disabled{background:#263752!important;color:#8795aa!important;cursor:not-allowed!important}
 @media(max-width:800px){.navlinks{display:none}.features,.steps,.plans{grid-template-columns:1fr}.hero{padding-top:55px}.nav-actions .navbtn:first-child{display:none}}
+
+/* ClassFlow post-signup onboarding */
+.onboard{display:none;max-width:1180px;margin:30px auto 70px;padding:0 24px}
+.onboard.show{display:block;animation:fadeUp .45s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.onboard-hero{display:grid;grid-template-columns:1.05fr .95fr;gap:28px;align-items:center;padding:34px;border:1px solid #263b5c;border-radius:28px;background:linear-gradient(135deg,rgba(17,31,55,.98),rgba(8,14,29,.98));box-shadow:0 24px 70px rgba(0,0,0,.28)}
+.eyebrow{color:var(--cyan);font-size:12px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase}
+.onboard h2{font-size:clamp(30px,4vw,48px);line-height:1.05;margin:10px 0 14px}
+.onboard p{color:var(--muted);line-height:1.7}
+.onboard-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+.btn-on{border:0;border-radius:13px;padding:13px 19px;font-weight:900;cursor:pointer;color:#07101d;background:linear-gradient(90deg,#67dcff,#8f80ff)}
+.btn-on.alt{color:var(--text);background:#15243b;border:1px solid #2a405f}
+.app-preview{border:1px solid #2a405f;border-radius:20px;padding:12px;background:#060b15;box-shadow:inset 0 0 40px rgba(103,220,255,.06)}
+.preview-top{height:28px;display:flex;align-items:center;gap:6px;padding:0 8px;border-bottom:1px solid #1d2c43}
+.dot{width:7px;height:7px;border-radius:50%;background:#3a5272}.preview-body{display:grid;grid-template-columns:75px 1fr;gap:10px;padding:12px}
+.preview-side{border-radius:10px;background:#0d1729;min-height:210px;padding:9px}
+.preview-side i{display:block;height:7px;background:#223654;border-radius:5px;margin:10px 2px}
+.preview-main{display:grid;gap:9px}
+.preview-hero{height:62px;border-radius:11px;background:linear-gradient(110deg,#163b5c,#2b285d);padding:12px}
+.preview-hero b{font-size:12px}.preview-hero span{display:block;width:55%;height:5px;background:#6b85a8;border-radius:5px;margin-top:8px}
+.preview-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.stat{height:52px;border:1px solid #223652;border-radius:9px;background:#0e192b;padding:8px}.stat b{font-size:11px}.stat span{display:block;color:#6e88a8;font-size:8px;margin-top:5px}
+.preview-list{height:75px;border:1px solid #223652;border-radius:9px;background:#0d1728;padding:9px}.row{height:9px;background:#1b2b45;border-radius:4px;margin-bottom:7px}
+.feature-title{text-align:center;margin:58px 0 24px}.feature-title h3{font-size:28px;margin:6px}.feature-title p{margin:auto;max-width:650px}
+.feature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.feature-card{border:1px solid #243957;border-radius:18px;padding:21px;background:linear-gradient(145deg,#0d182b,#09111f)}
+.feature-icon{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:#162a45;border:1px solid #294565;font-size:20px}
+.feature-card h4{margin:14px 0 7px}.feature-card p{font-size:14px;margin:0}
+.onboard-note{margin-top:20px;text-align:center;color:#70839e;font-size:12px}
+@media(max-width:800px){.onboard-hero{grid-template-columns:1fr;padding:23px}.feature-grid{grid-template-columns:1fr}.preview-body{grid-template-columns:60px 1fr}}
 </style>
 </head>
 <body>
@@ -61,6 +90,46 @@ footer{max-width:1180px;margin:20px auto 0;padding:35px 24px;border-top:1px soli
 </div>
 </section>
 
+
+<section id="onboarding" class="onboard">
+  <div class="onboard-hero">
+    <div>
+      <div class="eyebrow">Welcome to ClassFlow</div>
+      <h2>Run your coaching centre from one place.</h2>
+      <p>Before you choose a plan, here's what ClassFlow is built to handle: students, teachers, batches, attendance, fees, tests, communication and day-to-day centre operations.</p>
+      <div class="onboard-actions">
+        <button class="btn-on" onclick="document.getElementById('plans').scrollIntoView({behavior:'smooth'})">Choose a plan</button>
+        <button class="btn-on alt" onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})">Explore features</button>
+      </div>
+    </div>
+    <div class="app-preview" aria-label="ClassFlow dashboard preview">
+      <div class="preview-top"><i class="dot"></i><i class="dot"></i><i class="dot"></i></div>
+      <div class="preview-body">
+        <div class="preview-side"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="preview-main">
+          <div class="preview-hero"><b>Good morning 👋</b><span></span></div>
+          <div class="preview-stats"><div class="stat"><b>Students</b><span>Manage</span></div><div class="stat"><b>Attendance</b><span>Track</span></div><div class="stat"><b>Fees</b><span>Monitor</span></div></div>
+          <div class="preview-list"><div class="row"></div><div class="row" style="width:82%"></div><div class="row" style="width:67%"></div><div class="row" style="width:91%"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="feature-title">
+    <div class="eyebrow">What you can do</div>
+    <h3>Everything your centre needs, connected.</h3>
+    <p>ClassFlow brings the operational pieces of a coaching centre into one dashboard instead of scattered registers, spreadsheets and messages.</p>
+  </div>
+  <div class="feature-grid">
+    <div class="feature-card"><div class="feature-icon">👨‍🎓</div><h4>Students</h4><p>Maintain student records, batches, contact details and fee status in one place.</p></div>
+    <div class="feature-card"><div class="feature-icon">👩‍🏫</div><h4>Teachers</h4><p>Organise teacher access, classes and centre responsibilities without mixing roles.</p></div>
+    <div class="feature-card"><div class="feature-icon">📊</div><h4>Attendance</h4><p>Track attendance and see pending or completed class records through the dashboard.</p></div>
+    <div class="feature-card"><div class="feature-icon">💳</div><h4>Fees</h4><p>Keep fee collections, dues and payment history visible for centre operations.</p></div>
+    <div class="feature-card"><div class="feature-icon">📝</div><h4>Tests & Results</h4><p>Manage academic activity and keep performance information organised.</p></div>
+    <div class="feature-card"><div class="feature-icon">🔔</div><h4>Communication</h4><p>Keep important centre notifications and updates closer to the people who need them.</p></div>
+  </div>
+  <div class="onboard-note">You're signed in. When you're ready, choose Basic or Pro below. Payments currently use Cashfree Sandbox for testing.</div>
+</section>
+
 <section id="plans">
 <div class="title"><h2>Plans</h2><p>Choose a plan after signing in.</p></div>
 <div class="plans">
@@ -94,7 +163,11 @@ function openModal(id){document.getElementById(id).classList.add('open')}
 function closeModal(id){document.getElementById(id).classList.remove('open')}
 function openAuth(mode){closeModal('planModal');setAuth(mode);openModal('authModal')}
 function setAuth(mode){authMode=mode;document.getElementById('signupTab').classList.toggle('active',mode==='signup');document.getElementById('loginTab').classList.toggle('active',mode==='login');document.getElementById('authTitle').textContent=mode==='signup'?'Create your ClassFlow account':'Welcome back to ClassFlow';document.getElementById('authSub').textContent=mode==='signup'?'Create an account first. You can explore plans before payment.':'Sign in to your existing ClassFlow account to continue.';document.getElementById('name').style.display=mode==='signup'?'block':'none';document.getElementById('authSubmit').textContent=mode==='signup'?'Create account':'Sign in'}
-function selectPlan(name,price){selectedPlan={name,price};document.getElementById('planTitle').textContent='ClassFlow '+name;document.getElementById('planPrice').textContent='₹'+price.toLocaleString('en-IN')+' / month';document.getElementById('planText').textContent='Review the plan, then create an account or sign in. Payment is not being collected while ClassFlow is under construction.';openModal('planModal')}
+function selectPlan(name,price){selectedPlan={name,price};document.getElementById('planTitle').textContent='ClassFlow '+name;document.getElementById('planPrice').textContent='₹'+price.toLocaleString('en-IN')+' / month';document.getElementById('planText').textContent='Review the plan, then continue to secure Cashfree Sandbox checkout. No real production payment is being taken.';openModal('planModal')}
+function showOnboarding(){
+  const section=document.getElementById('onboarding');
+  if(section){ section.classList.add('show'); section.scrollIntoView({behavior:'smooth',block:'start'}); }
+}
 async function submitAuth(e){
   e.preventDefault();
   const err=document.getElementById('authError'); err.textContent='Connecting…';
@@ -106,8 +179,8 @@ async function submitAuth(e){
     if(!r.ok) throw new Error(data.detail||'Authentication failed.');
     accessToken=data.access_token; localStorage.setItem('classflow_access_token',accessToken);
     closeModal('authModal');
-    if(selectedPlan) openModal('planModal');
-    else alert('Account ready. Choose Basic or Pro to continue.');
+    if(selectedPlan){ openModal('planModal'); }
+    else { showOnboarding(); }
   }catch(ex){err.textContent=ex.message||'Could not connect to ClassFlow backend.'}
 }
 async function continueToCheckout(){
