@@ -78,6 +78,12 @@ def auth_user():
     con.close()
     return row
 
+init_db()
+
+@APP.get("/")
+def root():
+    return jsonify({"ok": True, "service": "classflow-web-backend", "message": "ClassFlow backend is live"})
+
 @APP.get("/api/health")
 def health():
     return jsonify({"ok":True,"service":"classflow-web-backend","mode":MODE})
