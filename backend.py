@@ -10,10 +10,10 @@ APP = Flask(__name__)
 CORS(APP, origins="*")  # Restrict to your GitHub Pages URL before production.
 
 DB_PATH = os.getenv("CLASSFLOW_WEB_DB", "classflow_web.db")
-CASHFREE_CLIENT_ID = os.getenv("CASHFREE_CLIENT_ID", "")
-CASHFREE_CLIENT_SECRET = os.getenv("CASHFREE_CLIENT_SECRET", "")
+CASHFREE_CLIENT_ID = os.getenv("CASHFREE_CLIENT_ID") or os.getenv("CASHFREE_APP_ID", "")
+CASHFREE_CLIENT_SECRET = os.getenv("CASHFREE_CLIENT_SECRET") or os.getenv("CASHFREE_SECRET_KEY", "")
 CASHFREE_API_VERSION = os.getenv("CASHFREE_API_VERSION", "2025-01-01")
-CASHFREE_BASE = os.getenv("CASHFREE_BASE", "https://sandbox.cashfree.com")
+CASHFREE_BASE = (os.getenv("CASHFREE_BASE", "https://sandbox.cashfree.com")).rstrip("/")
 PUBLIC_SITE_URL = os.getenv("PUBLIC_SITE_URL", "https://inderrr777.github.io/CLASSFLOW/")
 WEBHOOK_URL = os.getenv("WEBHOOK_URL", "")
 MODE = os.getenv("CASHFREE_MODE", "sandbox")
@@ -131,6 +131,9 @@ def create_order():
     plan=str(data.get("plan",""))
     if plan not in PLANS: return jsonify({"detail":"Invalid plan."}),400
     amount=PLANS[plan]  # Never trust the browser's price.
+    customer_phone = str(data.get("customer_phone","")).strip()
+    if not customer_phone.isdigit() or len(customer_phone) != 10:
+        return jsonify({"detail":"Please enter a valid 10-digit mobile number for Cashfree checkout."}),400
     if not CASHFREE_CLIENT_ID or not CASHFREE_CLIENT_SECRET:
         return jsonify({"detail":"Cashfree sandbox keys are not configured on the backend."}),500
 
@@ -142,10 +145,11 @@ def create_order():
       "customer_details":{
         "customer_id":"classflow_"+str(user["id"]),
         "customer_name":user["name"],
-        "customer_email":user["email"]
+        "customer_email":user["email"],
+        "customer_phone":customer_phone
       },
       "order_meta":{
-        "return_url":PUBLIC_SITE_URL+"?payment=return&order_id={order_id}",
+        "return_url":PUBLIC_SITE_URL+f"?payment=return&order_id={order_id}",
         **({"notify_url":WEBHOOK_URL} if WEBHOOK_URL else {})
       },
       "order_note":f"ClassFlow {plan} subscription"
@@ -154,12 +158,26 @@ def create_order():
       "x-client-id":CASHFREE_CLIENT_ID,
       "x-client-secret":CASHFREE_CLIENT_SECRET,
       "x-api-version":CASHFREE_API_VERSION,
-      "Content-Type":"application/json"
+      "Content-Type":"application/json",
+      "Accept":"application/json"
     }
-    r=requests.post(CASHFREE_BASE+"/pg/orders",headers=headers,json=payload,timeout=30)
+    try:
+        r=requests.post(CASHFREE_BASE+"/pg/orders",headers=headers,json=payload,timeout=30)
+    except requests.RequestException as exc:
+        return jsonify({"detail":"Could not reach Cashfree sandbox.","provider_error":str(exc)}),502
     if r.status_code>=300:
-        return jsonify({"detail":"Cashfree order creation failed.","cashfree_status":r.status_code,"cashfree_response":r.text[:1000]}),502
-    cf=r.json()
+        try:
+            provider=r.json()
+        except ValueError:
+            provider={"raw":r.text[:2000]}
+        detail = provider.get("message") or provider.get("type") or provider.get("code") or "Cashfree rejected the order request."
+        return jsonify({"detail":detail,"cashfree_status":r.status_code,"cashfree_response":provider}),502
+    try:
+        cf=r.json()
+    except ValueError:
+        return jsonify({"detail":"Cashfree returned an invalid response.","cashfree_status":r.status_code,"cashfree_response":r.text[:2000]}),502
+    if not cf.get("payment_session_id"):
+        return jsonify({"detail":"Cashfree did not return a payment session.","cashfree_status":r.status_code,"cashfree_response":cf}),502
     con=db()
     con.execute("""INSERT INTO orders(user_id,plan,amount,cashfree_order_id,payment_session_id,status,created_at)
                    VALUES(?,?,?,?,?,?,?)""",

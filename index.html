@@ -153,7 +153,7 @@ footer{max-width:1180px;margin:20px auto 0;padding:35px 24px;border-top:1px soli
 <div class="tabs"><button id="signupTab" class="tab active" onclick="setAuth('signup')">Create account</button><button id="loginTab" class="tab" onclick="setAuth('login')">Existing user</button></div>
 <form class="form" onsubmit="submitAuth(event)"><input id="name" placeholder="Owner / your name"><input id="email" type="email" placeholder="Email address" required><input id="password" type="password" placeholder="Password" required><button id="authSubmit">Create account</button><div id="authError" class="hint"></div><div class="hint">Your password is sent securely to the ClassFlow backend for authentication. It is not stored in this webpage.</div></form></div></div>
 
-<div id="planModal" class="modal"><div class="box"><div class="x" onclick="closeModal('planModal')">×</div><h2 id="planTitle"></h2><div class="sub">Sign in or create an account, then continue to secure Cashfree Sandbox checkout.</div><div class="plan-summary"><strong id="planPrice"></strong><p id="planText" class="hint"></p></div><button class="btn primary" style="width:100%" onclick="continueToCheckout()">Continue to payment</button><button class="btn" style="width:100%;margin-top:10px" onclick="openAuth('login')">Sign in / switch account</button></div></div>
+<div id="planModal" class="modal"><div class="box"><div class="x" onclick="closeModal('planModal')">×</div><h2 id="planTitle"></h2><div class="sub">Sign in or create an account, then continue to secure Cashfree Sandbox checkout.</div><div class="plan-summary"><strong id="planPrice"></strong><p id="planText" class="hint"></p></div><input id="checkoutPhone" type="tel" inputmode="numeric" maxlength="10" placeholder="10-digit mobile number" style="width:100%;box-sizing:border-box;margin:12px 0;padding:14px;border-radius:12px;border:1px solid #2a405f;background:#0b1424;color:#fff;font-size:16px"><button class="btn primary" style="width:100%" onclick="continueToCheckout()">Continue to payment</button><button class="btn" style="width:100%;margin-top:10px" onclick="openAuth('login')">Sign in / switch account</button></div></div>
 
 <script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
 <script>
@@ -187,9 +187,9 @@ async function continueToCheckout(){
   if(!accessToken){ openAuth('login'); return; }
   if(!selectedPlan){ closeModal('planModal'); document.getElementById('plans').scrollIntoView({behavior:'smooth'}); return; }
   try{
-    const r=await fetch(API_BASE+'/api/create-order',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+accessToken},body:JSON.stringify({plan:selectedPlan.name})});
+    const r=await fetch(API_BASE+'/api/create-order',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+accessToken},body:JSON.stringify({plan:selectedPlan.name,customer_phone:document.getElementById('checkoutPhone').value.trim()})});
     const data=await r.json();
-    if(!r.ok) throw new Error(data.detail||'Could not create Cashfree order.');
+    if(!r.ok) throw new Error(data.detail || data.cashfree_response || 'Could not create Cashfree order.');
     const cashfree=Cashfree({mode:'sandbox'});
     await cashfree.checkout({paymentSessionId:data.payment_session_id,redirectTarget:'_self'});
   }catch(ex){alert(ex.message||'Unable to start Cashfree checkout.')}
